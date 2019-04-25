@@ -11,6 +11,8 @@ Assets/AssetStoreTools*
 # Visual Studio / MonoDevelop generated #
 # ===================================== #
 ExportedObj/
+.vs
+.vs/*
 *.svd
 *.userprefs
 *.csproj
