@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
         sprites = new Transform[4, 4];
         for (int i = 1; i <= 16; i++)
         {
-            Transform tempObj = (Transform)Instantiate(cell, new Vector3(x, y, 0), Quaternion.identity);
+            Transform tempObj = Instantiate(cell, new Vector3(x, y, 0), Quaternion.identity);
             sprites[arrColl, arrCell] = tempObj;
             tempObj.transform.SetParent(cellsParent.transform);
             tempObj.GetComponent<Cell>().posCell = arrCell;
@@ -34,13 +34,12 @@ public class GameController : MonoBehaviour
             arrColl++;
             x += 1.85f;
 
-            if (i % 4 == 0)
-            {
-                arrColl = 0;
-                arrCell++;
-                x = -1.85f;
-                y -= 1.85f;
-            }
+            if (i % 4 != 0) continue;
+
+            arrColl = 0;
+            arrCell++;
+            x = -1.85f;
+            y -= 1.85f;
         }
     }
 
