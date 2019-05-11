@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
@@ -6,12 +7,18 @@ public class GameController : MonoBehaviour
     public Transform cellsParent;
     private Transform[,] sprites;
 
+    public Transform purpleStar;
+    public Transform orangeStar;
+    public Transform greenStar;
+    public Transform selectBarParent;
+    private List<Transform> stars = new List<Transform>();
     private float x = -1.85f;
     private float y = 1.75f;
 
     void Awake()
     {
         InitField();
+        CreateSelectBar();
     }
 
     void Start()
@@ -41,6 +48,21 @@ public class GameController : MonoBehaviour
             x = -1.85f;
             y -= 1.85f;
         }
+    }
+
+    void CreateSelectBar()
+    {
+        Transform tempObjPurpleStar = Instantiate(purpleStar, new Vector3(x + 1, y, 0), Quaternion.identity);
+        Transform tempObjOrangeStar = Instantiate(orangeStar, new Vector3(x + 2.85f, y, 0), Quaternion.identity);
+        Transform tempObjGreenStar = Instantiate(greenStar, new Vector3(x + 4.7f, y, 0), Quaternion.identity);
+
+        tempObjPurpleStar.transform.SetParent(selectBarParent.transform);
+        tempObjOrangeStar.transform.SetParent(selectBarParent.transform);
+        tempObjGreenStar.transform.SetParent(selectBarParent.transform);
+
+        stars.Add(tempObjPurpleStar);
+        stars.Add(tempObjOrangeStar);
+        stars.Add(tempObjGreenStar);
     }
 
     // Update is called once per frame

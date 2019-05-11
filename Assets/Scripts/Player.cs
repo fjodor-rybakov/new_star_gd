@@ -20,6 +20,11 @@ public class Player : MonoBehaviour
         {
             Transform hitCell = hit.transform;
 
+            if (hitCell.GetComponent<Star>() != null)
+            {
+                star = hitCell.GetComponent<SpriteRenderer>().sprite;
+            }
+
             if (!hitCell.GetComponent<SpriteRenderer>().sprite)
             {
                 hitCell.GetComponent<SpriteRenderer>().sprite = star;
