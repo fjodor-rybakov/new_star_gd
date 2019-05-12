@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour
     private List<Transform> stars = new List<Transform>();
     private float x = -1.85f;
     private float y = 1.75f;
+    public int maxCountStars = 4;
 
     void Awake()
     {
@@ -30,6 +31,7 @@ public class GameController : MonoBehaviour
     {
         int arrColl = 0, arrCell = 0;
         sprites = new Transform[4, 4];
+
         for (int i = 1; i <= 16; i++)
         {
             Transform tempObj = Instantiate(cell, new Vector3(x, y, 0), Quaternion.identity);
@@ -48,6 +50,16 @@ public class GameController : MonoBehaviour
             x = -1.85f;
             y -= 1.85f;
         }
+    }
+
+    void SetRandomStars()
+    {
+        /*Random rand = new Random();
+
+        for (int i = 0; i < maxCountStars; i++)
+        {
+
+        }*/
     }
 
     void CreateSelectBar()
