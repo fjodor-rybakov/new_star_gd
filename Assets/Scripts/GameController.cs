@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -7,6 +11,7 @@ public class GameController : MonoBehaviour
     public Transform cellsParent;
     private Transform[,] sprites;
 
+    public Sprite randS;
     public Transform purpleStar;
     public Transform orangeStar;
     public Transform greenStar;
@@ -20,11 +25,21 @@ public class GameController : MonoBehaviour
     {
         InitField();
         CreateSelectBar();
+        SetRandomStars();
+        StartCoroutine(DelayExec());
     }
 
     void Start()
     {
         
+    }
+
+    IEnumerator DelayExec()
+    {
+        print(Time.time);
+        yield return new WaitForSeconds(5);
+        CleanField();
+        print(Time.time);
     }
 
     void InitField()
@@ -39,7 +54,7 @@ public class GameController : MonoBehaviour
             tempObj.transform.SetParent(cellsParent.transform);
             tempObj.GetComponent<Cell>().posCell = arrCell;
             tempObj.GetComponent<Cell>().posColl = arrColl;
-
+           
             arrColl++;
             x += 1.85f;
 
@@ -54,12 +69,28 @@ public class GameController : MonoBehaviour
 
     void SetRandomStars()
     {
-        /*Random rand = new Random();
+        var rand = new System.Random();
 
         for (int i = 0; i < maxCountStars; i++)
         {
+            var num = rand.Next(0, 3);
+            if (num == 0)
+                sprites[rand.Next(0, 4), rand.Next(0, 4)].GetComponent<SpriteRenderer>().sprite = orangeStar.GetComponent<SpriteRenderer>().sprite;
+             else if (num == 1)
+                sprites[rand.Next(0, 4), rand.Next(0, 4)].GetComponent<SpriteRenderer>().sprite = purpleStar.GetComponent<SpriteRenderer>().sprite;
+            else if (num == 2) 
+                sprites[rand.Next(0, 4), rand.Next(0, 4)].GetComponent<SpriteRenderer>().sprite = greenStar.GetComponent<SpriteRenderer>().sprite;
+        }
 
-        }*/
+
+    }
+
+    void CleanField()
+    {
+        foreach (var x in sprites)
+        {
+            x.GetComponent<SpriteRenderer>().sprite = null;
+        }
     }
 
     void CreateSelectBar()
