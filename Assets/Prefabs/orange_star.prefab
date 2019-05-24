@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7562668295629414571}
   - component: {fileID: 1169770902930467125}
-  - component: {fileID: 2743668169945154622}
   - component: {fileID: -403422927110675681}
   m_Layer: 0
   m_Name: orange_star
@@ -81,19 +80,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2743668169945154622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1037015860354865055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d0ee9a4fc5d5934aaf88e1b8962d305, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
 --- !u!61 &-403422927110675681
 BoxCollider2D:
   m_ObjectHideFlags: 0

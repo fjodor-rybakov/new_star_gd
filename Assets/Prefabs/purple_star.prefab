@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 628105751962276615}
   - component: {fileID: 553546019239246515}
-  - component: {fileID: 909423596198665449}
   - component: {fileID: 8576442660181838926}
   m_Layer: 0
   m_Name: purple_star
@@ -81,19 +80,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &909423596198665449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4257260434334125111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d0ee9a4fc5d5934aaf88e1b8962d305, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
 --- !u!61 &8576442660181838926
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5379629367239663569}
   - component: {fileID: 2889301971424763095}
-  - component: {fileID: 7759820664462765294}
   - component: {fileID: 7482179585269253063}
   m_Layer: 0
   m_Name: green_star
@@ -81,19 +80,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7759820664462765294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3656588339961816098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d0ee9a4fc5d5934aaf88e1b8962d305, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
 --- !u!61 &7482179585269253063
 BoxCollider2D:
   m_ObjectHideFlags: 0

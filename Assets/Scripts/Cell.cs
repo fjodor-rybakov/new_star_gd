@@ -7,6 +7,7 @@ public class Cell : MonoBehaviour
     // Start is called before the first frame update
 
     public int posCell, posColl;
+    public EColors colorIndex;
 
     void Start()
     {
