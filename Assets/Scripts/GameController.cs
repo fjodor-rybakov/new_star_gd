@@ -143,9 +143,4 @@ public class GameController : MonoBehaviour
         _stars.Add(tempObjOrangeStar);
         _stars.Add(tempObjGreenStar);
     }
-
-    public IEnumerable<Star> GetWinCells()
-    {
-        return _winDataCells;
-    }
 }
