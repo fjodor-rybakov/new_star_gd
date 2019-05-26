@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -13,8 +14,6 @@ public class GameController : MonoBehaviour
     public Transform purpleStar;
     public Transform orangeStar;
     public Transform greenStar;
-    public Transform selectBarParent;
-    private readonly List<Transform> _stars = new List<Transform>();
     private readonly List<Star> _winDataCells = new List<Star>();
     
     private float _x = -1.85f;
@@ -25,30 +24,33 @@ public class GameController : MonoBehaviour
     private const int CountRows = 4;
     private const int CountCols = 6;
     public int CurrentCountStars { get; set; }
-    private bool _isCheckWin = true;
     private static readonly List<Coord> AlreadyExistCoors = new List<Coord>();
+    
+    public GameObject buttonPrefab;
+    private GameObject _canvas;
 
     void Awake()
     {
         InitField();
-        CreateSelectBar();
         SetRandomStars();
     }
 
     void Start()
     {
         StartCoroutine(DelayExec());
-    }
-
-    private IEnumerator DelayExec()
-    {
-        yield return new WaitForSeconds(DelayTime);
-        CleanField();
+        CreatedButtonDone();
+        _canvas.SetActive(false);
     }
 
     void Update()
     {
-        if (CurrentCountStars == maxCountStars && _isCheckWin) Debug.Log(CheckWin());
+        if (CurrentCountStars == maxCountStars && !_canvas.activeSelf) _canvas.SetActive(true);
+    }
+    
+    private IEnumerator DelayExec()
+    {
+        yield return new WaitForSeconds(DelayTime);
+        CleanField();
     }
     
     private void InitField()
@@ -75,6 +77,19 @@ public class GameController : MonoBehaviour
             _x = -1.85f;
             _y -= 1.85f;
         }
+    }
+    
+    void CreatedButtonDone()
+    {
+        _canvas = Instantiate(buttonPrefab);
+        var button = _canvas.GetComponentInChildren<Button>();
+
+        button.GetComponent<Button>().onClick.AddListener(OnClickDone);
+        button.GetComponentInChildren<Text>().text = "Done!";
+    }
+    void OnClickDone()
+    {
+        Debug.Log(CheckWin());
     }
 
     private void SetRandomStars()
@@ -123,24 +138,7 @@ public class GameController : MonoBehaviour
 
     private bool CheckWin()
     {
-        _isCheckWin = false;
-
         return _winDataCells.All(
             item => _sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite == item.Sprite);
-    }
-
-    private void CreateSelectBar()
-    {
-        var tempObjPurpleStar = Instantiate(purpleStar, new Vector3(_x + 1, _y, 0), Quaternion.identity);
-        var tempObjOrangeStar = Instantiate(orangeStar, new Vector3(_x + 2.85f, _y, 0), Quaternion.identity);
-        var tempObjGreenStar = Instantiate(greenStar, new Vector3(_x + 4.7f, _y, 0), Quaternion.identity);
-
-        tempObjPurpleStar.transform.SetParent(selectBarParent.transform);
-        tempObjOrangeStar.transform.SetParent(selectBarParent.transform);
-        tempObjGreenStar.transform.SetParent(selectBarParent.transform);
-
-        _stars.Add(tempObjPurpleStar);
-        _stars.Add(tempObjOrangeStar);
-        _stars.Add(tempObjGreenStar);
     }
 }
