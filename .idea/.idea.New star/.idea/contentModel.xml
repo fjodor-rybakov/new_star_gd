@@ -12,6 +12,7 @@
           <e p="EColors.cs" t="Include" />
           <e p="GameController.cs" t="Include" />
           <e p="Player.cs" t="Include" />
+          <e p="Reset.cs" t="Include" />
           <e p="SizeWindow.cs" t="Include" />
           <e p="Star.cs" t="Include" />
           <e p="Timer.cs" t="Include" />

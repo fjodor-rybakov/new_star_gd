@@ -129,11 +129,14 @@ public class GameController : MonoBehaviour
         return coords;
     }
 
-    private void CleanField()
+    public void CleanField()
     {
         foreach (var keys in _sprites)
-            foreach (var value in keys)
-                value.GetComponent<SpriteRenderer>().sprite = null;
+        foreach (var value in keys)
+        {
+            value.GetComponent<SpriteRenderer>().sprite = null;
+            CurrentCountStars = 0;
+        }
     }
 
     private bool CheckWin()
