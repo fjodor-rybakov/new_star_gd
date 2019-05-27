@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using Assets;
+using Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,13 +23,14 @@ public class GameController : MonoBehaviour
     public int maxCountStars = 4;
     private const int DelayTime = 3;
     private const int CountCells = 24;
-    private const int CountRows = 4;
-    private const int CountCols = 6;
+    public int level;
     public int CurrentCountStars { get; set; }
-    private static readonly List<Coord> AlreadyExistCoors = new List<Coord>();
     
     public GameObject buttonPrefab;
     private GameObject _canvas;
+    private Health _health;
+    private Score _score;
+    private Timer _timer;
 
     void Awake()
     {
@@ -37,6 +40,9 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        _health = GameObject.Find("Health").GetComponentInChildren<Text>().GetComponent<Health>();
+        _score = GameObject.Find("Score").GetComponentInChildren<Text>().GetComponent<Score>();
+        _timer = GameObject.Find("Timer").GetComponentInChildren<Text>().GetComponent<Timer>();
         StartCoroutine(DelayExec());
         CreatedButtonDone();
         _canvas.SetActive(false);
@@ -68,7 +74,7 @@ public class GameController : MonoBehaviour
 
             arrColl++;
             _x += 1.85f;
-            if (i % CountRows != 0) continue;
+            if (i % 4 != 0) continue;
 
             _sprites.Add(tempSpritesList);
             tempSpritesList = new List<Transform>();
@@ -89,18 +95,45 @@ public class GameController : MonoBehaviour
     }
     void OnClickDone()
     {
+        var isWin = CheckWin();
         Debug.Log(CheckWin());
+        CleanField();
+        if (isWin)
+        {
+            Debug.Log("You win!");
+            level++;
+            if (level % 5 == 0)
+            {
+                maxCountStars++;
+                _health.health++;
+            }
+
+            _score.score += level * 1000 / (_timer.minutes * 60 + _timer.seconds);
+            SetRandomStars();
+            StartCoroutine(DelayExec());
+        }
+        else
+        {
+            _health.health--;
+            if (_health.health <= 0)
+            {
+                Debug.Log("You lose!");
+            }
+
+            ShowStars();
+            StartCoroutine(DelayExec());
+        }
     }
 
     private void SetRandomStars()
     {
         var rand = new System.Random();
-
+        _winDataCells.Clear();
         for (var i = 0; i < maxCountStars; i++)
         {
             var color = (EColors) rand.Next(Enum.GetNames(typeof(EColors)).Length - 1);
             Sprite sprite = null;
-            var coords = GetCoordsPair();
+            var coords = Tools.GetCoordsPair();
 
             if (color == EColors.Green) sprite = orangeStar.GetComponent<SpriteRenderer>().sprite;
             else if (color == EColors.Orange) sprite = purpleStar.GetComponent<SpriteRenderer>().sprite;
@@ -109,26 +142,18 @@ public class GameController : MonoBehaviour
             _sprites[coords.X][coords.Y].GetComponent<SpriteRenderer>().sprite = sprite;
             _winDataCells.Add(new Star{Coords = coords, Sprite = sprite});
         }
+        
+        Tools.AlreadyExistCoors.Clear();
     }
 
-    private static Coord GetCoordsPair()
+    private void ShowStars()
     {
-        var rand = new System.Random();
-        int xPos = rand.Next(CountCols), yPos = rand.Next(CountRows);
-        var coords = new Coord {X = xPos, Y =  yPos};
-
-        while (AlreadyExistCoors.FirstOrDefault(i => i.X == xPos && i.Y == yPos) != null)
+        foreach (var item in _winDataCells)
         {
-            xPos = rand.Next(CountCols - 1);
-            yPos = rand.Next(CountRows - 1);
-            coords = new Coord {X = xPos, Y = yPos};
+            _sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite = item.Sprite;
         }
-
-        AlreadyExistCoors.Add(coords);
-
-        return coords;
     }
-
+    
     public void CleanField()
     {
         foreach (var keys in _sprites)
@@ -136,6 +161,7 @@ public class GameController : MonoBehaviour
         {
             value.GetComponent<SpriteRenderer>().sprite = null;
             CurrentCountStars = 0;
+            _canvas.SetActive(false);
         }
     }
 
