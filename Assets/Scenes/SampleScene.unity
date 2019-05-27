@@ -257,6 +257,16 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1681667714613730039, guid: f6c52b019c8526b458fd78d18e2c7b68,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -38.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4869321523589199943, guid: f6c52b019c8526b458fd78d18e2c7b68,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Score: 0'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6c52b019c8526b458fd78d18e2c7b68, type: 3}
 --- !u!1 &768014963 stripped
@@ -413,6 +423,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 119.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 902934569526931328, guid: cc10767a7ae9d8442925493f84c628f0,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Hp: 3'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc10767a7ae9d8442925493f84c628f0, type: 3}
