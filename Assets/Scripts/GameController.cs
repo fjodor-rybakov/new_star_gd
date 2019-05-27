@@ -57,6 +57,7 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(DelayTime);
         CleanField();
+        SetAble(true);
     }
     
     private void InitField()
@@ -70,6 +71,7 @@ public class GameController : MonoBehaviour
             tempObj.transform.SetParent(cellsParent.transform);
             tempObj.GetComponent<Cell>().posCell = arrCell;
             tempObj.GetComponent<Cell>().posColl = arrColl;
+            tempObj.GetComponent<BoxCollider2D>().enabled = false;
             tempSpritesList.Add(tempObj);
 
             arrColl++;
@@ -98,6 +100,7 @@ public class GameController : MonoBehaviour
         var isWin = CheckWin();
         Debug.Log(CheckWin());
         CleanField();
+        SetAble(false);
         if (isWin)
         {
             Debug.Log("You win!");
@@ -110,7 +113,6 @@ public class GameController : MonoBehaviour
 
             _score.score += level * 1000 / (_timer.minutes * 60 + _timer.seconds);
             SetRandomStars();
-            StartCoroutine(DelayExec());
         }
         else
         {
@@ -119,10 +121,11 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log("You lose!");
             }
-
+            
             ShowStars();
-            StartCoroutine(DelayExec());
         }
+        
+        StartCoroutine(DelayExec());
     }
 
     private void SetRandomStars()
@@ -162,6 +165,15 @@ public class GameController : MonoBehaviour
             value.GetComponent<SpriteRenderer>().sprite = null;
             CurrentCountStars = 0;
             _canvas.SetActive(false);
+        }
+    }
+
+    private void SetAble(bool isEnable)
+    {
+        foreach (var keys in _sprites)
+        foreach (var value in keys)
+        {
+            value.GetComponent<BoxCollider2D>().enabled = isEnable;
         }
     }
 
