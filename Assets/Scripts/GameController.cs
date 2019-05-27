@@ -58,6 +58,7 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(DelayTime);
         CleanField();
         SetAble(true);
+        _timer.isActive = true;
     }
     
     private void InitField()
@@ -111,8 +112,9 @@ public class GameController : MonoBehaviour
                 _health.health++;
             }
 
-            _score.score += level * 1000 / (_timer.minutes * 60 + _timer.seconds);
+            _score.score += level * 1000 / (int)_timer.targetTime;
             SetRandomStars();
+            _timer.targetTime = 0;
         }
         else
         {
@@ -125,6 +127,7 @@ public class GameController : MonoBehaviour
             ShowStars();
         }
         
+        _timer.isActive = false;
         StartCoroutine(DelayExec());
     }
 

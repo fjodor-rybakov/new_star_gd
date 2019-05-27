@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Game
@@ -6,8 +8,8 @@ namespace Game
     public class Timer : MonoBehaviour
     {
         public Text counterText;
-
-        public int seconds, minutes;
+        public float targetTime;
+        public bool isActive;
     
         void Start()
         {
@@ -16,9 +18,10 @@ namespace Game
 
         void Update()
         {
-            minutes = (int) (Time.time / 60f);
-            seconds = (int) (Time.time % 60f);
-            counterText.text = $"{minutes:00} : {seconds:00}";
+            if(isActive){
+                targetTime += Time.deltaTime;
+            }
+            counterText.text = $"Time: {targetTime:00}";
         }
     }
 }
