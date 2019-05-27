@@ -17,7 +17,7 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
-            scoreText.text = $"{score:0}";
+            scoreText.text = $"Score: {score:0}";
         }
     }
 }
