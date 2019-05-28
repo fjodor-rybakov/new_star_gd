@@ -21,7 +21,7 @@ namespace Game
             if(isActive){
                 targetTime += Time.deltaTime;
             }
-            counterText.text = $"Time: {targetTime:00}";
+            counterText.text = $"T: {targetTime:00}";
         }
     }
 }
