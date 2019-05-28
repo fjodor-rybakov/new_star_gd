@@ -16,7 +16,7 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
-            healthText.text = $"Hp: {health}";
+            healthText.text = $"{health}";
         }
     }
 }
