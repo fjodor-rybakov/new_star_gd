@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game
 {
@@ -9,7 +8,7 @@ namespace Game
         
         public void OnClickReset()
         {
-             gameController.CleanField();
+             gameController.Undo();
         }
     }
 }

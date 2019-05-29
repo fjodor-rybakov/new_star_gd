@@ -11,10 +11,8 @@ namespace Game
 
         void Update()
         {
-            if(isActive){
-                targetTime += Time.deltaTime;
-            }
-            
+            if(isActive) targetTime += Time.deltaTime;
+
             counterText.text = $"{targetTime:00}";
         }
     }

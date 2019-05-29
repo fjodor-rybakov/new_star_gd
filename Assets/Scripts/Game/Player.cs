@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets;
+using UnityEngine;
 
 namespace Game
 {
@@ -39,6 +40,8 @@ namespace Game
         
             // if set star at cell
             hitCell.GetComponent<SpriteRenderer>().sprite = star;
+            var coords = new Coord {X = cell.posCell, Y = cell.posColl};
+            _gameController.starsList.Add(new Star{Coords = coords, Sprite = sprite});
             _gameController.CurrentCountStars++;
         }
     }

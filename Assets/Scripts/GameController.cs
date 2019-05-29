@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     public Transform orangeStar;
     public Transform greenStar;
     private readonly List<Star> _winDataCells = new List<Star>();
+    public readonly List<Star> starsList = new List<Star>();
     
     private float _x = -1.85f;
     private float _y = 1.75f;
@@ -27,6 +28,9 @@ public class GameController : MonoBehaviour
     public int CurrentCountStars { get; set; }
     
     public GameObject buttonDone;
+    public GameObject buttonRestart;
+    public Button buttonPause;
+    public Button buttonMenu;
     public Health health;
     public Score score;
     public Timer timer;
@@ -39,22 +43,30 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(DelayExec());
         buttonDone.GetComponent<Button>().onClick.AddListener(OnClickDone);
+        buttonRestart.GetComponent<Button>().onClick.AddListener(OnClickRestart);
+        buttonRestart.SetActive(false);
         buttonDone.SetActive(false);
+        StartCoroutine(DelayExec());
     }
 
     void Update()
     {
-        if (CurrentCountStars == maxCountStars && !buttonDone.activeSelf) buttonDone.SetActive(true);
+        if (CurrentCountStars != maxCountStars || buttonDone.activeSelf) return;
+        buttonDone.SetActive(true);
     }
     
     private IEnumerator DelayExec()
     {
+        SetAble(false);
+        buttonMenu.interactable = false;
+        buttonPause.interactable = false;
         yield return new WaitForSeconds(DelayTime);
         CleanField();
         SetAble(true);
         timer.isActive = true;
+        buttonMenu.interactable = true;
+        buttonPause.interactable = true;
     }
     
     private void InitField()
@@ -84,15 +96,28 @@ public class GameController : MonoBehaviour
         }
     }
     
-    public void OnClickDone()
+    void OnClickRestart()
+    {
+        CleanField();
+        timer.isActive = false;
+        health.health = 3;
+        score.score = 0;
+        timer.targetTime = 0;
+        CurrentCountStars = 0;
+        maxCountStars = 4;
+        buttonRestart.SetActive(false);
+        SetRandomStars();
+        StartCoroutine(DelayExec());
+    }
+        
+    
+    void OnClickDone()
     {
         var isWin = CheckWin();
-        Debug.Log(CheckWin());
         CleanField();
-        SetAble(false);
+        starsList.Clear();
         if (isWin)
         {
-            Debug.Log("You win!");
             level++;
             if (level % 5 == 0)
             {
@@ -109,7 +134,9 @@ public class GameController : MonoBehaviour
             health.health--;
             if (health.health <= 0)
             {
-                Debug.Log("You lose!");
+                buttonRestart.SetActive(true);
+                timer.isActive = false;
+                return;
             }
             
             ShowStars();
@@ -147,6 +174,16 @@ public class GameController : MonoBehaviour
             _sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite = item.Sprite;
         }
     }
+
+    public void Undo()
+    {
+        if (starsList.Count <= 0) return;
+        var star = starsList.ElementAt(starsList.Count - 1);
+        _sprites[star.Coords.X][star.Coords.Y].GetComponent<SpriteRenderer>().sprite = null;
+        starsList.RemoveAt(starsList.Count - 1);
+        CurrentCountStars--;
+        buttonDone.SetActive(false);
+    }
     
     public void CleanField()
     {
@@ -159,7 +196,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void SetAble(bool isEnable)
+    public void SetAble(bool isEnable)
     {
         foreach (var keys in _sprites)
         foreach (var value in keys)
