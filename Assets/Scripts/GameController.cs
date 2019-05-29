@@ -26,11 +26,10 @@ public class GameController : MonoBehaviour
     public int level;
     public int CurrentCountStars { get; set; }
     
-    public GameObject buttonPrefab;
-    private GameObject _canvas;
-    private Health _health;
-    private Score _score;
-    private Timer _timer;
+    public GameObject buttonDone;
+    public Health health;
+    public Score score;
+    public Timer timer;
 
     void Awake()
     {
@@ -40,17 +39,14 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        _health = GameObject.Find("Health").GetComponentInChildren<Text>().GetComponent<Health>();
-        _score = GameObject.Find("Score").GetComponentInChildren<Text>().GetComponent<Score>();
-        _timer = GameObject.Find("Timer").GetComponentInChildren<Text>().GetComponent<Timer>();
         StartCoroutine(DelayExec());
-        CreatedButtonDone();
-        _canvas.SetActive(false);
+        buttonDone.GetComponent<Button>().onClick.AddListener(OnClickDone);
+        buttonDone.SetActive(false);
     }
 
     void Update()
     {
-        if (CurrentCountStars == maxCountStars && !_canvas.activeSelf) _canvas.SetActive(true);
+        if (CurrentCountStars == maxCountStars && !buttonDone.activeSelf) buttonDone.SetActive(true);
     }
     
     private IEnumerator DelayExec()
@@ -58,7 +54,7 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(DelayTime);
         CleanField();
         SetAble(true);
-        _timer.isActive = true;
+        timer.isActive = true;
     }
     
     private void InitField()
@@ -88,15 +84,7 @@ public class GameController : MonoBehaviour
         }
     }
     
-    void CreatedButtonDone()
-    {
-        _canvas = Instantiate(buttonPrefab);
-        var button = _canvas.GetComponentInChildren<Button>();
-
-        button.GetComponent<Button>().onClick.AddListener(OnClickDone);
-        button.GetComponentInChildren<Text>().text = "Done!";
-    }
-    void OnClickDone()
+    public void OnClickDone()
     {
         var isWin = CheckWin();
         Debug.Log(CheckWin());
@@ -109,17 +97,17 @@ public class GameController : MonoBehaviour
             if (level % 5 == 0)
             {
                 maxCountStars++;
-                _health.health++;
+                health.health++;
             }
 
-            _score.score += level * 1000 / (int)_timer.targetTime;
+            score.score += level * 1000 / (int)timer.targetTime;
             SetRandomStars();
-            _timer.targetTime = 0;
+            timer.targetTime = 0;
         }
         else
         {
-            _health.health--;
-            if (_health.health <= 0)
+            health.health--;
+            if (health.health <= 0)
             {
                 Debug.Log("You lose!");
             }
@@ -127,7 +115,7 @@ public class GameController : MonoBehaviour
             ShowStars();
         }
         
-        _timer.isActive = false;
+        timer.isActive = false;
         StartCoroutine(DelayExec());
     }
 
@@ -167,7 +155,7 @@ public class GameController : MonoBehaviour
         {
             value.GetComponent<SpriteRenderer>().sprite = null;
             CurrentCountStars = 0;
-            _canvas.SetActive(false);
+            buttonDone.SetActive(false);
         }
     }
 

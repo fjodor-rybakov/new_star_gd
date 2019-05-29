@@ -1,19 +1,13 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game
 {
     public class Score : MonoBehaviour
     {
         // Start is called before the first frame update
-        public Text scoreText;
+        public TMPro.TextMeshProUGUI scoreText;
         public int score;
         
-        void Start()
-        {
-            scoreText = GetComponent<Text>();
-        }
-
         // Update is called once per frame
         void Update()
         {

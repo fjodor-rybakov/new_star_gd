@@ -5,15 +5,11 @@ namespace Game
 {
     public class Reset : MonoBehaviour
     {
-        void Start()
+        public GameController gameController;
+        
+        public void OnClickReset()
         {
-            GetComponent<Button>().onClick.AddListener(OnClickReset);
-        }
-
-        void OnClickReset()
-        {
-            var gamePlayObject = GameObject.Find("GamePlay");
-            gamePlayObject.GetComponent<GameController>().CleanField();
+             gameController.CleanField();
         }
     }
 }
