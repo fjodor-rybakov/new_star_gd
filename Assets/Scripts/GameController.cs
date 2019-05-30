@@ -4,20 +4,27 @@ using System.Collections;
 using System.Linq;
 using Assets;
 using Game;
+using Handlers;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
     public Transform cell;
-    public Transform cellsParent;
+    public GameObject cellsParent;
     private readonly List<List<Transform>> _sprites = new List<List<Transform>>();
+
+    public GameObject gameInterface;
+    public GameObject gameMenu;
+    public GameObject gameLose;
+    public GameObject gameBar;
 
     public Transform purpleStar;
     public Transform orangeStar;
     public Transform greenStar;
     private readonly List<Star> _winDataCells = new List<Star>();
-    public readonly List<Star> starsList = new List<Star>();
+    public List<Star> starsList = new List<Star>();
+    public int CurrentCountStars { get; set; }
     
     private float _x = -1.85f;
     private float _y = 1.75f;
@@ -25,11 +32,8 @@ public class GameController : MonoBehaviour
     private const int DelayTime = 3;
     private const int CountCells = 24;
     public int level;
-    public int CurrentCountStars { get; set; }
-    
+
     public GameObject buttonDone;
-    public GameObject buttonRestart;
-    public Button buttonPause;
     public Button buttonMenu;
     public Health health;
     public Score score;
@@ -38,16 +42,12 @@ public class GameController : MonoBehaviour
     void Awake()
     {
         InitField();
-        SetRandomStars();
+        buttonMenu.GetComponent<Menu>().OnClickMenu();
     }
 
     void Start()
     {
-        buttonDone.GetComponent<Button>().onClick.AddListener(OnClickDone);
-        buttonRestart.GetComponent<Button>().onClick.AddListener(OnClickRestart);
-        buttonRestart.SetActive(false);
         buttonDone.SetActive(false);
-        StartCoroutine(DelayExec());
     }
 
     void Update()
@@ -59,14 +59,10 @@ public class GameController : MonoBehaviour
     private IEnumerator DelayExec()
     {
         SetAble(false);
-        buttonMenu.interactable = false;
-        buttonPause.interactable = false;
         yield return new WaitForSeconds(DelayTime);
         CleanField();
         SetAble(true);
         timer.isActive = true;
-        buttonMenu.interactable = true;
-        buttonPause.interactable = true;
     }
     
     private void InitField()
@@ -96,8 +92,11 @@ public class GameController : MonoBehaviour
         }
     }
     
-    void OnClickRestart()
+    public void NewGame()
     {
+        gameMenu.SetActive(false);
+        cellsParent.SetActive(true);
+        gameInterface.SetActive(true);
         CleanField();
         timer.isActive = false;
         health.health = 3;
@@ -105,13 +104,13 @@ public class GameController : MonoBehaviour
         timer.targetTime = 0;
         CurrentCountStars = 0;
         maxCountStars = 4;
-        buttonRestart.SetActive(false);
+        gameBar.SetActive(true);
         SetRandomStars();
         StartCoroutine(DelayExec());
     }
         
     
-    void OnClickDone()
+    public void OnClickDone()
     {
         var isWin = CheckWin();
         CleanField();
@@ -134,8 +133,10 @@ public class GameController : MonoBehaviour
             health.health--;
             if (health.health <= 0)
             {
-                buttonRestart.SetActive(true);
                 timer.isActive = false;
+                gameBar.SetActive(false);
+                SetAble(false);
+                gameLose.SetActive(true);
                 return;
             }
             
@@ -149,6 +150,8 @@ public class GameController : MonoBehaviour
     private void SetRandomStars()
     {
         var rand = new System.Random();
+        CleanField();
+        starsList.Clear();
         _winDataCells.Clear();
         for (var i = 0; i < maxCountStars; i++)
         {
