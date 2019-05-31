@@ -50,7 +50,6 @@ namespace Game
             else
             {
                 gameController.starsList.Add(new Star{Coords = coords, Sprite = sprite});
-                gameController.CurrentCountStars = gameController.starsList.Count;
             }
         }
     }

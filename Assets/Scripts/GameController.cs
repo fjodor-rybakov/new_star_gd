@@ -27,7 +27,6 @@ public class GameController : MonoBehaviour
     public Transform greenStar;
     private readonly List<Star> _winDataCells = new List<Star>();
     public List<Star> starsList = new List<Star>();
-    public int CurrentCountStars { get; set; }
     
     private float _x = -1.85f;
     private float _y = 1.75f;
@@ -72,7 +71,7 @@ public class GameController : MonoBehaviour
                 isActiveDelay = false;
             }
         }
-        if (CurrentCountStars != maxCountStars || buttonDone.activeSelf) return;
+        if (starsList.Count != maxCountStars || buttonDone.activeSelf) return;
         buttonDone.SetActive(true);
     }
     
@@ -122,7 +121,6 @@ public class GameController : MonoBehaviour
         health.health = 3;
         score.score = 0;
         timer.targetTime = 0;
-        CurrentCountStars = 0;
         maxCountStars = 4;
         gameBar.SetActive(true);
         SetRandomStars();
@@ -206,7 +204,6 @@ public class GameController : MonoBehaviour
         var star = starsList.ElementAt(starsList.Count - 1);
         _sprites[star.Coords.X][star.Coords.Y].GetComponent<SpriteRenderer>().sprite = null;
         starsList.RemoveAt(starsList.Count - 1);
-        CurrentCountStars--;
         buttonDone.SetActive(false);
     }
     
@@ -216,9 +213,9 @@ public class GameController : MonoBehaviour
         foreach (var value in keys)
         {
             value.GetComponent<SpriteRenderer>().sprite = null;
-            CurrentCountStars = 0;
             buttonDone.SetActive(false);
         }
+        starsList.Clear();
     }
 
     public void SetAble(bool isEnable)
