@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
     public GameObject gameMenu;
     public GameObject gameLose;
     public GameObject gameBar;
+    public GameObject helpMenu;
 
     public Transform purpleStar;
     public Transform orangeStar;
@@ -32,6 +33,9 @@ public class GameController : MonoBehaviour
     private const int DelayTime = 3;
     private const int CountCells = 24;
     public int level;
+    
+    public float targetTimeDelay;
+    public bool isActiveDelay;
 
     public GameObject buttonDone;
     public Button buttonMenu;
@@ -52,11 +56,23 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
+        if (isActiveDelay)
+        {
+            targetTimeDelay += Time.deltaTime;
+
+            if (targetTimeDelay >= 3)
+            {
+                CleanField();
+                SetAble(true);
+                timer.isActive = true;
+                isActiveDelay = false;
+            }
+        }
         if (CurrentCountStars != maxCountStars || buttonDone.activeSelf) return;
         buttonDone.SetActive(true);
     }
     
-    private IEnumerator DelayExec()
+    public IEnumerator DelayExec()
     {
         SetAble(false);
         yield return new WaitForSeconds(DelayTime);
@@ -106,7 +122,8 @@ public class GameController : MonoBehaviour
         maxCountStars = 4;
         gameBar.SetActive(true);
         SetRandomStars();
-        StartCoroutine(DelayExec());
+        StartDelay();
+        // StartCoroutine(DelayExec());
     }
         
     
@@ -144,7 +161,8 @@ public class GameController : MonoBehaviour
         }
         
         timer.isActive = false;
-        StartCoroutine(DelayExec());
+        StartDelay();
+        // StartCoroutine(DelayExec());
     }
 
     private void SetRandomStars()
@@ -212,5 +230,12 @@ public class GameController : MonoBehaviour
     {
         return _winDataCells.All(
             item => _sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite == item.Sprite);
+    }
+
+    private void StartDelay()
+    {
+        SetAble(false);
+        isActiveDelay = true;
+        targetTimeDelay = 0;
     }
 }

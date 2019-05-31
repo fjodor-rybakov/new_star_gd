@@ -5,7 +5,7 @@ namespace Game
     public class Health : MonoBehaviour
     {
         public TMPro.TextMeshProUGUI healthText;
-        public int health = 3;
+        public int health;
         
         // Update is called once per frame
         void Update()

@@ -24,9 +24,14 @@
           </e>
           <e p="GameController.cs" t="Include" />
           <e p="Handlers" t="Include">
+            <e p="Continue.cs" t="Include" />
+            <e p="Help.cs" t="Include" />
             <e p="Menu.cs" t="Include" />
             <e p="NewGame.cs" t="Include" />
             <e p="Reset.cs" t="Include" />
+          </e>
+          <e p="Interfaces" t="Include">
+            <e p="GameData.cs" t="Include" />
           </e>
         </e>
         <e p="TextMesh Pro" t="Include">
