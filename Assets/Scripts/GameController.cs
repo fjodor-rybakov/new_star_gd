@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour
     public GameObject gameLose;
     public GameObject gameBar;
     public GameObject helpMenu;
+    public GameObject successText;
+    public GameObject failureText;
 
     public Transform purpleStar;
     public Transform orangeStar;
@@ -30,7 +32,7 @@ public class GameController : MonoBehaviour
     private float _x = -1.85f;
     private float _y = 1.75f;
     public int maxCountStars = 4;
-    private const int DelayTime = 3;
+    private const int DelayTime = 4;
     private const int CountCells = 24;
     public int level;
     
@@ -47,6 +49,8 @@ public class GameController : MonoBehaviour
     {
         InitField();
         buttonMenu.GetComponent<Menu>().OnClickMenu();
+        successText.SetActive(false);
+        failureText.SetActive(false);
     }
 
     void Start()
@@ -123,7 +127,6 @@ public class GameController : MonoBehaviour
         gameBar.SetActive(true);
         SetRandomStars();
         StartDelay();
-        // StartCoroutine(DelayExec());
     }
         
     
@@ -134,6 +137,7 @@ public class GameController : MonoBehaviour
         starsList.Clear();
         if (isWin)
         {
+            StartCoroutine(ShowSuccess());
             level++;
             if (level % 5 == 0)
             {
@@ -156,13 +160,13 @@ public class GameController : MonoBehaviour
                 gameLose.SetActive(true);
                 return;
             }
-            
+
+            StartCoroutine(ShowFailure());
             ShowStars();
         }
         
         timer.isActive = false;
         StartDelay();
-        // StartCoroutine(DelayExec());
     }
 
     private void SetRandomStars()
@@ -230,6 +234,20 @@ public class GameController : MonoBehaviour
     {
         return _winDataCells.All(
             item => _sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite == item.Sprite);
+    }
+
+    private IEnumerator ShowSuccess()
+    {
+        successText.SetActive(true);
+        yield return new WaitForSeconds(1);
+        successText.SetActive(false);
+    }
+
+    private IEnumerator ShowFailure()
+    {
+        failureText.SetActive(true);
+        yield return new WaitForSeconds(1);
+        failureText.SetActive(false);
     }
 
     private void StartDelay()
