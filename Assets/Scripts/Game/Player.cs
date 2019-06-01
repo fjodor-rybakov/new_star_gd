@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Assets;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Game
 {
@@ -20,18 +22,11 @@ namespace Game
             if (Camera.main == null) return;
             Vector2 clickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             var hit = Physics2D.Raycast(clickPoint, Vector2.zero);
-
+            
             if (!hit.collider) return;
             var hitCell = hit.transform;
             var cell = hitCell.GetComponent<Cell>();
             var sprite = hitCell.GetComponent<SpriteRenderer>().sprite;
-
-            // if select star on bar
-            if (!cell)
-            {
-                star = sprite;
-                return;
-            }
         
             // if set star at cell
             hitCell.GetComponent<SpriteRenderer>().sprite = star;
@@ -51,6 +46,21 @@ namespace Game
             {
                 gameController.starsList.Add(new Star{Coords = coords, Sprite = sprite});
             }
+        }
+
+        public void PurpleClick()
+        {
+            star = gameController.purpleStar.sprite;
+        }
+        
+        public void OrangeClick()
+        {
+            star = gameController.orangeStar.sprite;
+        }
+        
+        public void GreenClick()
+        {
+            star = gameController.greenStar.sprite;
         }
     }
 }

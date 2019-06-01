@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
 {
     public Transform cell;
     public GameObject cellsParent;
-    private readonly List<List<Transform>> _sprites = new List<List<Transform>>();
+    public readonly List<List<Transform>> Sprites = new List<List<Transform>>();
 
     public GameObject gameInterface;
     public GameObject gameMenu;
@@ -22,9 +22,9 @@ public class GameController : MonoBehaviour
     public GameObject successText;
     public GameObject failureText;
 
-    public Transform purpleStar;
-    public Transform orangeStar;
-    public Transform greenStar;
+    public Image purpleStar;
+    public Image orangeStar;
+    public Image greenStar;
     private readonly List<Star> _winDataCells = new List<Star>();
     public List<Star> starsList = new List<Star>();
     
@@ -37,6 +37,7 @@ public class GameController : MonoBehaviour
     
     public float targetTimeDelay;
     public bool isActiveDelay;
+    public bool isGame;
 
     public GameObject buttonDone;
     public Button buttonMenu;
@@ -69,6 +70,7 @@ public class GameController : MonoBehaviour
                 SetAble(true);
                 timer.isActive = true;
                 isActiveDelay = false;
+                isGame = true;
             }
         }
         if (starsList.Count != maxCountStars || buttonDone.activeSelf) return;
@@ -102,7 +104,7 @@ public class GameController : MonoBehaviour
             _x += 1.85f;
             if (i % 4 != 0) continue;
 
-            _sprites.Add(tempSpritesList);
+            Sprites.Add(tempSpritesList);
             tempSpritesList = new List<Transform>();
             arrColl = 0;
             arrCell++;
@@ -176,25 +178,39 @@ public class GameController : MonoBehaviour
         for (var i = 0; i < maxCountStars; i++)
         {
             var color = (EColors) rand.Next(Enum.GetNames(typeof(EColors)).Length - 1);
-            Sprite sprite = null;
             var coords = Tools.GetCoordsPair();
 
-            if (color == EColors.Green) sprite = orangeStar.GetComponent<SpriteRenderer>().sprite;
-            else if (color == EColors.Orange) sprite = purpleStar.GetComponent<SpriteRenderer>().sprite;
-            else if (color == EColors.Purple) sprite = greenStar.GetComponent<SpriteRenderer>().sprite;
+            var sprite = GetStarSprite(color);
 
-            _sprites[coords.X][coords.Y].GetComponent<SpriteRenderer>().sprite = sprite;
-            _winDataCells.Add(new Star{Coords = coords, Sprite = sprite});
+            Sprites[coords.X][coords.Y].GetComponent<SpriteRenderer>().sprite = sprite;
+            _winDataCells.Add(new Star{Coords = coords, Sprite = sprite, Color = color});
         }
         
         Tools.AlreadyExistCoors.Clear();
+    }
+
+    public Sprite GetStarSprite(EColors color)
+    {
+        switch (color)
+        {
+            case EColors.Green:
+                return orangeStar.sprite;
+            case EColors.Orange:
+                return purpleStar.sprite;
+            case EColors.Purple:
+                return greenStar.sprite;
+            case EColors.None:
+                return null;
+            default:
+                return null;
+        }
     }
 
     private void ShowStars()
     {
         foreach (var item in _winDataCells)
         {
-            _sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite = item.Sprite;
+            Sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite = item.Sprite;
         }
     }
 
@@ -202,14 +218,14 @@ public class GameController : MonoBehaviour
     {
         if (starsList.Count <= 0) return;
         var star = starsList.ElementAt(starsList.Count - 1);
-        _sprites[star.Coords.X][star.Coords.Y].GetComponent<SpriteRenderer>().sprite = null;
+        Sprites[star.Coords.X][star.Coords.Y].GetComponent<SpriteRenderer>().sprite = null;
         starsList.RemoveAt(starsList.Count - 1);
         buttonDone.SetActive(false);
     }
     
     public void CleanField()
     {
-        foreach (var keys in _sprites)
+        foreach (var keys in Sprites)
         foreach (var value in keys)
         {
             value.GetComponent<SpriteRenderer>().sprite = null;
@@ -220,7 +236,7 @@ public class GameController : MonoBehaviour
 
     public void SetAble(bool isEnable)
     {
-        foreach (var keys in _sprites)
+        foreach (var keys in Sprites)
         foreach (var value in keys)
         {
             value.GetComponent<BoxCollider2D>().enabled = isEnable;
@@ -230,7 +246,7 @@ public class GameController : MonoBehaviour
     private bool CheckWin()
     {
         return _winDataCells.All(
-            item => _sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite == item.Sprite);
+            item => Sprites[item.Coords.X][item.Coords.Y].GetComponent<SpriteRenderer>().sprite == item.Sprite);
     }
 
     private IEnumerator ShowSuccess()
@@ -252,5 +268,6 @@ public class GameController : MonoBehaviour
         SetAble(false);
         isActiveDelay = true;
         targetTimeDelay = 0;
+        isGame = false;
     }
 }

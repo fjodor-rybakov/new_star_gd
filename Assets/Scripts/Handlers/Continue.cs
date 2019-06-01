@@ -11,10 +11,9 @@ namespace Handlers
             if (gameController.health.health == 0) return;
             gameController.cellsParent.SetActive(true);
             gameController.gameInterface.SetActive(true);
-            if (gameController.isActiveDelay)
-                gameController.timer.isActive = true;
             gameController.gameMenu.SetActive(false);
-            gameController.isActiveDelay = true;
+            if (gameController.isGame) gameController.timer.isActive = true;
+            else gameController.isActiveDelay = true;
         }
     }
 }
